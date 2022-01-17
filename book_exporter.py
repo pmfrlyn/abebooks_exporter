@@ -45,7 +45,10 @@ class DBSelectWidget(QWidget):
         self.setLayout(layout)
 
     def get_filename(self):
-        return self.fname[0]
+        if self.fname is None:
+            return None
+        else:
+            return self.fname[0]
 
     def select_db(self):
         self.fname = QFileDialog.getOpenFileName(self, 'Open file', '~/', "BKP files (*.bkp *.db)")
@@ -68,7 +71,10 @@ class OutputSelectWidget(QWidget):
         self.setLayout(layout)
 
     def get_filename(self):
-        return self.fname[0]
+        if self.fname is None:
+            return None
+        else:
+            return self.fname[0]
 
     def select_file(self):
         self.fname = QFileDialog.getSaveFileName(
@@ -108,6 +114,12 @@ class BookshelfExporter(QWidget):
         cancel_button.clicked.connect(self.exit_application)
 
     def export_file(self):
+        db_filename = self.db_select_widget.get_filename()
+        out_filename = self.output_select_widget.get_filename()
+
+        if not all([db_filename, out_filename]):
+            return None
+
         env = Environment()
         template = env.from_string(source=TEMPLATE_STR)
         conn = sqlite3.connect(self.db_select_widget.get_filename())
