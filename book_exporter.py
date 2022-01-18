@@ -142,7 +142,7 @@ class BookshelfExporter(QWidget):
             ORDER BY
                 inventoryId ASC""")
 
-        with open(self.output_select_widget.get_filename(), 'w') as f:
+        with open(self.output_select_widget.get_filename(), 'w', encoding="utf-8") as f:
             f.write(template.render(entries=entries))
 
         self.exit_application()
